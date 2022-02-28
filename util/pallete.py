@@ -10,7 +10,7 @@
 
 from PIL import Image
 
-def get_mask_pallete(npimg, dataset='detail'):
+def get_mask_pallete(npimg, dataset='detail', pallete=None):
     """Get image color pallete for visualizing masks"""
     # recovery boundary
     if dataset == 'pascal_voc':
@@ -23,6 +23,8 @@ def get_mask_pallete(npimg, dataset='detail'):
         out_img.putpalette(citypallete)
     elif dataset in ('detail', 'pascal_voc', 'pascal_aug'):
         out_img.putpalette(vocpallete)
+    elif dataset == 'custom':
+        out_img.putpalette(pallete)
     return out_img
 
 def _get_voc_pallete(num_cls):

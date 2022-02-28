@@ -109,7 +109,12 @@ def run(input_path, output_path, model_path, model_type="dpt_hybrid", optimize=T
         filename = os.path.join(
             output_path, os.path.splitext(os.path.basename(img_name))[0]
         )
-        util.io.write_segm_img(filename, img, prediction, alpha=0.5)
+        if args.mask:
+            mask_classes_to_ids = {"persons": [13], "cars": [21, 81, 84, 103, 117]}
+            mask_ids = mask_classes_to_ids[args.mask_class]
+            util.io.write_segm_img(filename, img, prediction, alpha=0.5, bwmask=True, bwmask_ids=mask_ids)
+        else:
+            util.io.write_segm_img(filename, img, prediction, alpha=0.5)
 
     print("finished")
 
@@ -138,6 +143,11 @@ if __name__ == "__main__":
     parser.add_argument("--optimize", dest="optimize", action="store_true")
     parser.add_argument("--no-optimize", dest="optimize", action="store_false")
     parser.set_defaults(optimize=True)
+
+    parser.add_argument("--mask", dest="mask", action="store_true")
+    parser.set_defaults(mask=False)
+
+    parser.add_argument("--mask-class", default="persons", choices=['persons', 'cars'])
 
     args = parser.parse_args()
 

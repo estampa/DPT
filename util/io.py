@@ -2,6 +2,7 @@
 """
 import sys
 import re
+import math
 import numpy as np
 import cv2
 import torch
@@ -9,7 +10,7 @@ import torch
 from PIL import Image
 
 
-from .pallete import get_mask_pallete
+from .pallete import get_mask_pallete, adepallete
 
 def read_pfm(path):
     """Read pfm file.
@@ -204,7 +205,7 @@ def write_depth(path, depth, bits=1, absolute_depth=False, pfm=False, jpg=False)
     return
 
 
-def write_segm_img(path, image, labels, palette="detail", alpha=0.5):
+def write_segm_img(path, image, labels, palette="detail", alpha=0.5, bwmask=False, bwmask_ids=[]):
     """Write depth map to pfm and png file.
 
     Args:
@@ -213,12 +214,16 @@ def write_segm_img(path, image, labels, palette="detail", alpha=0.5):
         labels (array): labeling of the image
     """
 
-    mask = get_mask_pallete(labels, "ade20k")
+    if bwmask:
+        pallete = [255 if math.floor(x/3) in bwmask_ids else 0 for x in range(len(adepallete))]
+        out = get_mask_pallete(labels, "custom", pallete)
+    else:
+        mask = get_mask_pallete(labels, "ade20k")
 
-    img = Image.fromarray(np.uint8(255*image)).convert("RGBA")
-    seg = mask.convert("RGBA")
+        img = Image.fromarray(np.uint8(255*image)).convert("RGBA")
+        seg = mask.convert("RGBA")
 
-    out = Image.blend(img, seg, alpha)
+        out = Image.blend(img, seg, alpha)
 
     out.save(path + ".png")
 
