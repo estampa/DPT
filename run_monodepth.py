@@ -171,7 +171,8 @@ def run(input_path, output_path, model_path, model_type="dpt_hybrid", optimize=T
         filename = os.path.join(
             output_path, os.path.splitext(os.path.basename(img_name))[0]
         )
-        util.io.write_depth(filename, prediction, bits=2, absolute_depth=args.absolute_depth, pfm=args.pfm)
+        util.io.write_depth(filename, prediction, bits=2, absolute_depth=args.absolute_depth, pfm=args.pfm,
+                            jpg=args.jpg)
 
     print("finished")
 
@@ -210,10 +211,13 @@ if __name__ == "__main__":
     parser.add_argument("--pfm", dest="pfm", action="store_true")
     parser.add_argument("--no-pfm", dest="pfm", action="store_false")
 
+    parser.add_argument("--jpg", dest="jpg", action="store_true")
+
     parser.set_defaults(optimize=True)
     parser.set_defaults(kitti_crop=False)
     parser.set_defaults(absolute_depth=False)
     parser.set_defaults(pfm=False)
+    parser.set_defaults(jpg=False)
 
     args = parser.parse_args()
 
