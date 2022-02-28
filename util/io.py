@@ -194,7 +194,7 @@ def write_depth(path, depth, bits=1, absolute_depth=False, pfm=False, jpg=False)
 
     if jpg:
         if bits == 2:
-            out = cv2.convertScaleAbs(out, alpha=(255.0/65535.0))
+            out = cv2.convertScaleAbs(out.astype("uint16"), alpha=(255.0/65535.0))
         cv2.imwrite(path + ".jpg", out.astype("uint8"), [cv2.IMWRITE_JPEG_QUALITY, 95])
     else:
         if bits == 1:
