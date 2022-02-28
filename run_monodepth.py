@@ -124,7 +124,7 @@ def run(input_path, output_path, model_path, model_type="dpt_hybrid", optimize=T
     os.makedirs(output_path, exist_ok=True)
 
     print("start processing")
-    for ind, img_name in enumerate(img_names):
+    for ind, img_name in enumerate(sorted(img_names)):
         if os.path.isdir(img_name):
             continue
 

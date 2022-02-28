@@ -82,7 +82,7 @@ def run(input_path, output_path, model_path, model_type="dpt_hybrid", optimize=T
 
     print("start processing")
 
-    for ind, img_name in enumerate(img_names):
+    for ind, img_name in enumerate(sorted(img_names)):
 
         print("  processing {} ({}/{})".format(img_name, ind + 1, num_images))
 
